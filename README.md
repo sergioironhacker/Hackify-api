@@ -1,3 +1,3 @@
 # OnlyHack-api
 
-![Texto alternativo](https://github.com/tuusuario/turepositorio/imagen.png)
+![Texto alternativo](https://github.com/sergioironhacker/OnlyHack-api/blob/main/logo.png)
