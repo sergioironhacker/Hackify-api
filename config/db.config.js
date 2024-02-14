@@ -15,7 +15,7 @@ mongoose
     process.exit(0);
   });
 
-// Cierre de la conexión
+
 
 process.on("SIGINT", () => {
   mongoose.connection.close().then(function () {
