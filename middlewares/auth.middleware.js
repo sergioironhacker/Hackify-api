@@ -3,8 +3,8 @@ const createError = require('http-errors');
 const { StatusCodes } = require('http-status-codes');
 
 module.exports.isAuthenticated = (req, res, next) => {
-  // Mirar la cabecera de authorization
-  const authorization = req.header("Authorization"); // "Bearer <token>"
+  // Mirar la cabecera/header de authorization
+  const authorization = req.header("Authorization"); // "Bearer <token>""
 
   if (!authorization) {
     return next(createError(StatusCodes.UNAUTHORIZED, "Authorization header was not provided"));
@@ -24,7 +24,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 
   jwt.verify(
     token, // Token que va incluido en la petición,
-    process.env.JWT_SECRET || 'only', // Secreto o firma para asegurarme que es un token mío,
+    process.env.JWT_SECRET || 'test', // Secreto o firma para asegurarme que es un token mío,
     (err, decodedToken) => {
       if (err) {
         return next(err);
