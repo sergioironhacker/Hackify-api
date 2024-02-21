@@ -6,6 +6,9 @@ const followsController = require('../controllers/follows.controller');
 const likesController = require('../controllers/likes.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const upload = require('./storage.config');
+const getFormsController = require('../controllers/getForms.controller'); // Controlador para obtener todos los formularios
+const createFormController = require('../controllers/form.controller'); // Controlador para crear un formulario
+
 
 // Auth
 router.post('/login', authController.login);
@@ -30,5 +33,11 @@ router.get('/followed/:id', authMiddleware.isAuthenticated, followsController.ge
 
 // Likes
 router.post('/likes/:tweetOwner/:tweet', authMiddleware.isAuthenticated, likesController.toggleLike);
+
+
+// Create Form
+router.get('/forms', authMiddleware.isAuthenticated, getFormsController.getForms);
+router.post('/createform', authMiddleware.isAuthenticated, createFormController.createForm); // Ruta para crear el formulario
+
 
 module.exports = router;
