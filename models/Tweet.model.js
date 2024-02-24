@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+// CAMBIAR A NOMBRE FINAL
+
 const tweetSchema = mongoose.Schema(
   {
     content: {

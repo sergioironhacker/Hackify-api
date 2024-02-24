@@ -18,7 +18,8 @@ router.get('/users/me', authMiddleware.isAuthenticated, usersController.getCurre
 router.get('/users/:id', authMiddleware.isAuthenticated, usersController.getUser)
 router.post('/users', upload.single('avatar'), usersController.create);
 
-// Tweets
+// Tweets 
+// CAMBIAR TWEETS POR XXXXX
 router.post('/tweets', authMiddleware.isAuthenticated, tweetsController.create);
 router.get('/tweets/timeline/:page', authMiddleware.isAuthenticated, tweetsController.timeline);
 router.get('/tweets/me', authMiddleware.isAuthenticated, tweetsController.getCurrentUserTweets)
