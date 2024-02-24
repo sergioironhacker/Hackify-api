@@ -8,6 +8,7 @@ const authMiddleware = require('../middlewares/auth.middleware');
 const upload = require('./storage.config');
 const getFormsController = require('../controllers/getForms.controller'); // Controlador para obtener todos los formularios
 const createFormController = require('../controllers/form.controller'); // Controlador para crear un formulario
+const productController = require('../controllers/product.controller')
 
 
 // Auth
@@ -39,6 +40,10 @@ router.post('/likes/:tweetOwner/:tweet', authMiddleware.isAuthenticated, likesCo
 // Create Form
 router.get('/forms', authMiddleware.isAuthenticated, getFormsController.getForms);
 router.post('/createform', authMiddleware.isAuthenticated, createFormController.createForm); // Ruta para crear el formulario
+
+// buy 
+
+router.post('/forms/checkout', authMiddleware.isAuthenticated, productController.createCheckoutSession);
 
 
 module.exports = router;

@@ -10,6 +10,10 @@ const formSchema = mongoose.Schema(
       type: String,
       required: [true, 'La descripción del formulario es obligatoria'],
     },
+    price: {
+      type: Number,
+      required: [true, 'Price is required.']
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Referencia al modelo de usuario
