@@ -51,6 +51,20 @@ userSchema.virtual('likes', {
   justOne: false
 })
 
+userSchema.virtual('contributions', {
+  ref: 'Contribution',
+  localField: '_id',
+  foreignField: 'contributingUser',
+  justOne: false
+})
+
+userSchema.virtual('archivedIdeas', {
+  ref: 'Archive',
+  localField: '_id',
+  foreignField: 'archiver',
+  justOne: false
+}
+)
 
 // Crear el metodo para comparar contraseñas
 

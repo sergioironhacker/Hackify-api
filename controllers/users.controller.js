@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const createError = require('http-errors');
 const User = require("../models/User.model")
-const Follow = require('../models/Follow.model');
+const Archive = require('../models/Archive.model');
 
 module.exports.create = (req, res, next) => {
   const userToCreate = {
@@ -24,17 +24,16 @@ module.exports.create = (req, res, next) => {
 }
 
 const getUser = (id, req, res, next) => {
-  const followingPromise = Follow.countDocuments({ follower: id });
-  const followedPromise = Follow.countDocuments({ followed: id });
+  const archivedPromise = Archive.countDocuments({ archived: id });
   const profilePromise = User.findById(id)
-    .populate({ path: 'likes', populate: { path: 'tweet', populate: 'user' } });
+    .populate({ path: 'likes', populate: { path: 'idea', populate: 'user' } });
 
-  Promise.all([ profilePromise, followingPromise, followedPromise ])
-    .then(([ user, followingCount, followedCount ]) => {
+  Promise.all([ profilePromise, archivedPromise ])
+    .then(([ user, archivedCount ]) => {
       if (!user) {
         next(createError(StatusCodes.NOT_FOUND, 'User not found'))
       } else {
-        res.json({ data: user, following: followingCount, followed: followedCount })
+        res.json({ data: user, archived: archivedCount })
       }
     })
     .catch(next)
