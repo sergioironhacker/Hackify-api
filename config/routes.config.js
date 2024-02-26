@@ -5,6 +5,7 @@ const archivesController = require('../controllers/archives.controller');
 const likesController = require('../controllers/likes.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const upload = require('./storage.config');
+const productController = require('../controllers/product.controller')
 const ideasController = require('../controllers/ideas.controller'); // Controlador para obtener las ideas
 
 // Auth
