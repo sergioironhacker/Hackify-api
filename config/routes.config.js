@@ -43,7 +43,7 @@ router.post('/createform', authMiddleware.isAuthenticated, createFormController.
 
 // buy 
 
-router.post('/forms/checkout', authMiddleware.isAuthenticated, productController.createCheckoutSession);
+router.post('/forms/checkout/:id', authMiddleware.isAuthenticated, productController.createCheckoutSession);
 
 
 module.exports = router;
