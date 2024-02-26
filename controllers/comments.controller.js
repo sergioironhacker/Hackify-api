@@ -1,12 +1,8 @@
-// CAMBIAR A NOMBRE FINAL
-
-const { StatusCodes } = require('http-status-codes');
-const Tweet = require("../models/Tweet.model");
-const Like = require('../models/Like.model');
-const Follow = require('../models/Follow.model');
+/* const { StatusCodes } = require('http-status-codes');
+const Comment = require("../models/Comment.model");
 
 module.exports.create = (req, res, next) => {
-  Tweet.create({ content: req.body.content, user: req.currentUserId })
+  Tweet.create({ idea: req.params.id, content: req.body.content, user: req.currentUserId })
     .then(createdTweet => {
       res.status(StatusCodes.CREATED).json(createdTweet);
     })
@@ -85,4 +81,4 @@ module.exports.timeline = (req, res, next) => {
         })
     })
     .catch(next)
-}
+} */

@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
 
-// CAMBIAR A NOMBRE FINAL
-
-const tweetSchema = mongoose.Schema(
+const archiveSchema = mongoose.Schema(
   {
-    content: {
-      type: String,
-      required: [true, 'Required field'],
-    },
-    user: {
+    archiver: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
+      required: [true, 'Required field'],
+    },
+    archivedIdea: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Idea',
       required: [true, 'Required field'],
     }
   },
@@ -24,9 +23,10 @@ const tweetSchema = mongoose.Schema(
         delete ret.__v;
         delete ret._id;
       },
-    },
-  }
-)
+    }
+  },
+);
 
-const Tweet = mongoose.model('Tweet', tweetSchema);
-module.exports = Tweet;
+const Archive = mongoose.model('Archive', archiveSchema);
+
+module.exports = Archive;

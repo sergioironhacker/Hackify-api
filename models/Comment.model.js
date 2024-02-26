@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
 
-const followSchema = mongoose.Schema(
+const commentSchema = mongoose.Schema(
   {
-    follower: {
+    content: {
+      type: String,
+      required: [true, 'Required field'],
+    },
+    user: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: [true, 'Required field'],
     },
-    followed: {
+    idea: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'User',
+      ref: 'Idea',
       required: [true, 'Required field'],
     }
   },
@@ -23,10 +27,9 @@ const followSchema = mongoose.Schema(
         delete ret.__v;
         delete ret._id;
       },
-    }
-  },
-);
+    },
+  }
+)
 
-const Follow = mongoose.model('Follow', followSchema);
-
-module.exports = Follow;
+const Comment = mongoose.model('Comment', commentSchema);
+module.exports = Comment;

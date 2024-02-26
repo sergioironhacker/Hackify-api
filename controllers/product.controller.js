@@ -1,6 +1,6 @@
 const createHttpError = require('http-errors');
 const { StatusCodes } = require('http-status-codes');
-const Form = require('../models/Form.model');
+const Form = require('../models/Idea.model');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 

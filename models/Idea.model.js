@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
 
-const formSchema = mongoose.Schema(
+const ideaSchema = mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'El título del formulario es obligatorio'],
+      required: [true, 'Idea title is required.'],
     },
     description: {
       type: String,
-      required: [true, 'La descripción del formulario es obligatoria'],
+      required: [true, 'Idea description is required.'],
     },
-    price: {
+    contributionMax: {
       type: Number,
-      required: [true, 'Price is required.']
+      required: [true, 'Maximum contribution amount is required.']
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Referencia al modelo de usuario
-      required: [true, 'El usuario es obligatorio'],
+      required: [true, 'User is required'],
     }
   },
   {
@@ -34,6 +34,6 @@ const formSchema = mongoose.Schema(
   }
 );
 
-const Form = mongoose.model('Form', formSchema);
+const Idea = mongoose.model('Idea', ideaSchema);
 
-module.exports = Form;
+module.exports = Idea;
