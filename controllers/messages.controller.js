@@ -7,20 +7,20 @@ const messagesController = {
       try {
         console.log('ruta mensaje');
         const { recipient, content, sender } = req.body;
-        console.log(recipient, req.body);
+    /*     console.log(recipient, req.body); */
         // Verificar si req.currentUserId está definido
       
         // Buscar al usuario destinatario por su nombre de usuario
         const recipientUser = await User.findOne({ username: recipient });
-        console.log('hola', recipientUser);
+    /*     console.log('hola', recipientUser); */
         if (!recipientUser) {
           console.log('Usuario destinatario no encontrado:', recipient);
           return res.status(404).json({ error: 'Usuario destinatario no encontrado' });
         }
 
         // Crear el mensaje en la base de datos con el sender establecido
-        console.log('holahhh', recipientUser);
-        console.log(sender);
+      /*   console.log('holahhh', recipientUser); */
+       /*  console.log(sender); */
         const newMessage = await Message.create({
           sender: sender, // Establecer el sender con el ID del usuario autenticado
           recipient: recipientUser.id,
@@ -38,7 +38,8 @@ const messagesController = {
     // Obtener mensajes enviados por el usuario actual
     getSentMessages: async (req, res) => {
       try {
-        const userId = req.currentUserId; // ID del usuario autenticado
+       
+        const userId = req.currentUserId; // undefined /////////////////////
 
         console.log('ID del usuario autenticado:', userId);
   
@@ -55,12 +56,17 @@ const messagesController = {
     // Obtener mensajes recibidos por el usuario actual
     getReceivedMessages: async (req, res) => {
       try {
-        const userId = req.currentUserId; // ID del usuario autenticado
+        const userId = req.currentUserId; // undefined /////////////////////
 
-        console.log('ID del usuario autenticado:', userId);
+        console.log('mensages:', userId);
   
         // Buscar mensajes recibidos por el usuario actual
         const receivedMessages = await Message.find({ recipient: userId });
+
+        //
+
+        console.log('Mensajes recibidos:', receivedMessages);
+
   
         res.json(receivedMessages);
       } catch (error) {
@@ -76,6 +82,10 @@ const messagesController = {
   
         // Buscar el mensaje por su ID
         const message = await Message.findById(messageId);
+
+        //
+
+        console.log('Detalles del mensaje:', message);
   
         if (!message) {
           return res.status(404).json({ error: 'Mensaje no encontrado' });
@@ -92,6 +102,9 @@ const messagesController = {
     markMessageAsRead: async (req, res) => {
       try {
         const messageId = req.params.id;
+
+        //
+        console.log('ID del mensaje a marcar como leído:', messageId);
   
         // Actualizar el mensaje para marcarlo como leído
         await Message.findByIdAndUpdate(messageId, { $set: { isRead: true } });
@@ -107,6 +120,10 @@ const messagesController = {
     deleteMessage: async (req, res) => {
       try {
         const messageId = req.params.id;
+
+        //
+
+        console.log('ID del mensaje a eliminar:', messageId);
   
         // Eliminar el mensaje de la base de datos
         await Message.findByIdAndDelete(messageId);
