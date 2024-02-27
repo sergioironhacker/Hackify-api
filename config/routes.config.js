@@ -33,6 +33,27 @@ router.post('/likes/:ideaOwner/:idea', authMiddleware.isAuthenticated, likesCont
 
 
 
+// Crear mensaje
+router.post('/messages/send', authMiddleware.isAuthenticated, messagesController.sendMessage);
+
+// Obtener mensajes enviados por el usuario actual
+router.get('/messages/sent', authMiddleware.isAuthenticated, messagesController.getSentMessages);
+
+// Obtener mensajes recibidos por el usuario actual
+router.get('/messages/received', authMiddleware.isAuthenticated, messagesController.getReceivedMessages);
+
+// Obtener detalles de un mensaje específico
+router.get('/messages/:id', authMiddleware.isAuthenticated, messagesController.getMessageDetails);
+
+// Marcar un mensaje como leído
+router.put('/messages/:id/mark-read', authMiddleware.isAuthenticated, messagesController.markMessageAsRead);
+
+// Eliminar un mensaje
+router.delete('/messages/:id', authMiddleware.isAuthenticated, messagesController.deleteMessage);
+
+
+////////////////////
+
 /* // Comments 
 router.post('/tweets', authMiddleware.isAuthenticated, tweetsController.create);
 router.get('/tweets/timeline/:page', authMiddleware.isAuthenticated, tweetsController.timeline);
