@@ -7,6 +7,8 @@ const authMiddleware = require('../middlewares/auth.middleware');
 const upload = require('./storage.config');
 const productController = require('../controllers/product.controller')
 const ideasController = require('../controllers/ideas.controller'); // Controlador para obtener las ideas
+const messagesController = require('../controllers/messages.controller')
+
 
 // Auth
 router.post('/login', authController.login);
@@ -34,22 +36,22 @@ router.post('/likes/:ideaOwner/:idea', authMiddleware.isAuthenticated, likesCont
 
 
 // Crear mensaje
-router.post('/messages/send', authMiddleware.isAuthenticated, messagesController.sendMessage);
+router.post('/messages/send', /* authMiddleware.isAuthenticated, */ messagesController.sendMessage);
 
 // Obtener mensajes enviados por el usuario actual
-router.get('/messages/sent', authMiddleware.isAuthenticated, messagesController.getSentMessages);
+router.get('/messages/sent', /* authMiddleware.isAuthenticated, */ messagesController.getSentMessages);
 
 // Obtener mensajes recibidos por el usuario actual
-router.get('/messages/received', authMiddleware.isAuthenticated, messagesController.getReceivedMessages);
+router.get('/messages/received', /* authMiddleware.isAuthenticated, */ messagesController.getReceivedMessages);
 
 // Obtener detalles de un mensaje específico
-router.get('/messages/:id', authMiddleware.isAuthenticated, messagesController.getMessageDetails);
+router.get('/messages/:id', /* authMiddleware.isAuthenticated, */ messagesController.getMessageDetails);
 
 // Marcar un mensaje como leído
-router.put('/messages/:id/mark-read', authMiddleware.isAuthenticated, messagesController.markMessageAsRead);
+router.put('/messages/:id/mark-read', /* authMiddleware.isAuthenticated, */ messagesController.markMessageAsRead);
 
 // Eliminar un mensaje
-router.delete('/messages/:id', authMiddleware.isAuthenticated, messagesController.deleteMessage);
+router.delete('/messages/:id',/*  authMiddleware.isAuthenticated, */ messagesController.deleteMessage);
 
 
 ////////////////////

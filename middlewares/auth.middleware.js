@@ -30,6 +30,8 @@ module.exports.isAuthenticated = (req, res, next) => {
         return next(err);
       }
 
+      console.log('ID del usuario autenticado:', decodedToken.id);
+
       req.currentUserId = decodedToken.id // El objeto request, a partir de aqui, tendra asociado currentUserId, lo usaremos en los controladores
       next();
     }

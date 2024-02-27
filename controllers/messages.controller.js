@@ -1,18 +1,33 @@
-const Message = require('../models/Comment.model');
+const User = require('../models/User.model');
+const Message = require('../models/Message.model');
 
 const messagesController = {
     // Crear un nuevo mensaje
     sendMessage: async (req, res) => {
       try {
-        const { sender, recipient, content } = req.body;
-        
-        // Crear el mensaje en la base de datos
+        console.log('ruta mensaje');
+        const { recipient, content, sender } = req.body;
+        console.log(recipient, req.body);
+        // Verificar si req.currentUserId está definido
+      
+        // Buscar al usuario destinatario por su nombre de usuario
+        const recipientUser = await User.findOne({ username: recipient });
+        console.log('hola', recipientUser);
+        if (!recipientUser) {
+          console.log('Usuario destinatario no encontrado:', recipient);
+          return res.status(404).json({ error: 'Usuario destinatario no encontrado' });
+        }
+
+        // Crear el mensaje en la base de datos con el sender establecido
+        console.log('holahhh', recipientUser);
+        console.log(sender);
         const newMessage = await Message.create({
-          sender,
-          recipient,
-          content
+          sender: sender, // Establecer el sender con el ID del usuario autenticado
+          recipient: recipientUser.id,
+          content: content
         });
   
+        console.log('Mensaje enviado:', newMessage);
         res.status(201).json(newMessage);
       } catch (error) {
         console.error('Error al enviar el mensaje:', error);
@@ -23,7 +38,9 @@ const messagesController = {
     // Obtener mensajes enviados por el usuario actual
     getSentMessages: async (req, res) => {
       try {
-        const userId = req.user._id; // ID del usuario autenticado
+        const userId = req.currentUserId; // ID del usuario autenticado
+
+        console.log('ID del usuario autenticado:', userId);
   
         // Buscar mensajes enviados por el usuario actual
         const sentMessages = await Message.find({ sender: userId });
@@ -38,7 +55,9 @@ const messagesController = {
     // Obtener mensajes recibidos por el usuario actual
     getReceivedMessages: async (req, res) => {
       try {
-        const userId = req.user._id; // ID del usuario autenticado
+        const userId = req.currentUserId; // ID del usuario autenticado
+
+        console.log('ID del usuario autenticado:', userId);
   
         // Buscar mensajes recibidos por el usuario actual
         const receivedMessages = await Message.find({ recipient: userId });
@@ -98,6 +117,6 @@ const messagesController = {
         res.status(500).json({ error: 'Error interno del servidor' });
       }
     }
-  };
-  
-  module.exports = messagesController;
+};
+
+module.exports = messagesController;
