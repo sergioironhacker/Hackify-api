@@ -24,7 +24,7 @@ router.post('/ideas/create', authMiddleware.isAuthenticated, ideasController.cre
 
 // buy 
 
-router.post('/forms/checkout/:id', authMiddleware.isAuthenticated, productController.createCheckoutSession);
+router.post('/ideas/checkout/:id', authMiddleware.isAuthenticated, productController.createCheckoutSession);
 
 // Archive ideas
 router.post('/archived/:ideaOwner/:idea', authMiddleware.isAuthenticated, archivesController.toggleArchive);

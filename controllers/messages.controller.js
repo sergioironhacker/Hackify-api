@@ -38,11 +38,11 @@ const messagesController = {
     // Obtener mensajes enviados por el usuario actual
     getSentMessages: async (req, res) => {
       try {
-       
-        const userId = req.currentUserId; // undefined /////////////////////
+        const userId = req.params.id; // undefined /////////////////////
 
-        console.log('ID del usuario autenticado:', userId);
+        console.log('ID:', userId);
   
+        
         // Buscar mensajes enviados por el usuario actual
         const sentMessages = await Message.find({ sender: userId });
   
@@ -56,7 +56,7 @@ const messagesController = {
     // Obtener mensajes recibidos por el usuario actual
     getReceivedMessages: async (req, res) => {
       try {
-        const userId = req.currentUserId; // undefined /////////////////////
+        const userId = req.user; // undefined /////////////////////
 
         console.log('mensages:', userId);
   

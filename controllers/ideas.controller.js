@@ -14,7 +14,7 @@ module.exports.createIdea = (req, res, next) => {
 
 module.exports.getIdeas = async (req, res, next) => {
   try {
-    const ideas = await Idea.find().populate('username');
+    const ideas = await Idea.find().populate('user');
     res.status(StatusCodes.OK).json(ideas);
   } catch (error) {
     next(error);
