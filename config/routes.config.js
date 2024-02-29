@@ -39,10 +39,10 @@ router.post('/likes/:ideaOwner/:idea', authMiddleware.isAuthenticated, likesCont
 router.post('/messages/send', /* authMiddleware.isAuthenticated, */ messagesController.sendMessage);
 
 // Obtener mensajes enviados por el usuario actual
-router.get('/messages/sent',  /* authMiddleware.isAuthenticated, */  messagesController.getSentMessages);
+router.get('/messages/sent/:userId',  /* authMiddleware.isAuthenticated, */  messagesController.getSentMessages);
 
 // Obtener mensajes recibidos por el usuario actual
-router.get('/messages/received', /* authMiddleware.isAuthenticated, */ messagesController.getReceivedMessages);
+router.get('/messages/received/:userId', /* authMiddleware.isAuthenticated, */ messagesController.getReceivedMessages);
 
 // Obtener detalles de un mensaje específico
 router.get('/messages/:id', /* authMiddleware.isAuthenticated, */ messagesController.getMessageDetails);
