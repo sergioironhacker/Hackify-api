@@ -36,22 +36,28 @@ router.post('/likes/:ideaOwner/:idea', authMiddleware.isAuthenticated, likesCont
 
 
 // Crear mensaje
-router.post('/messages/send', /* authMiddleware.isAuthenticated, */ messagesController.sendMessage);
+router.post('/messages/send',  messagesController.sendMessage);
 
 // Obtener mensajes enviados por el usuario actual
-router.get('/messages/sent/:userId',  /* authMiddleware.isAuthenticated, */  messagesController.getSentMessages);
+router.get('/messages/sent/:userId',    messagesController.getSentMessages);
 
 // Obtener mensajes recibidos por el usuario actual
-router.get('/messages/received/:userId', /* authMiddleware.isAuthenticated, */ messagesController.getReceivedMessages);
+router.get('/messages/received/:userId',  messagesController.getReceivedMessages);
 
 // Obtener detalles de un mensaje específico
-router.get('/messages/:id', /* authMiddleware.isAuthenticated, */ messagesController.getMessageDetails);
+router.get('/messages/:id',  messagesController.getMessageDetails);
 
 // Marcar un mensaje como leído
-router.put('/messages/:id/mark-read', /* authMiddleware.isAuthenticated, */ messagesController.markMessageAsRead);
+router.put('/messages/:id/mark-read',  messagesController.markMessageAsRead);
 
 // Eliminar un mensaje
-router.delete('/messages/:id',/*  authMiddleware.isAuthenticated, */ messagesController.deleteMessage);
+router.delete('/messages/:id', messagesController.deleteMessage);
+
+
+
+//////////////// busqueda 
+
+/* router.get('/search', ideasController.searchIdeas); */
 
 
 ////////////////////

@@ -20,3 +20,7 @@ module.exports.getIdeas = async (req, res, next) => {
     next(error);
   }
 };
+
+// busqueda 
+
+
