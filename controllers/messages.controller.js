@@ -7,6 +7,10 @@ const messagesController = {
     try {
       const { recipient, content, sender } = req.body;
 
+
+
+
+      
       // Buscar al usuario destinatario por su ID
       const recipientUser = await User.findById(recipient);
       if (!recipientUser) {
