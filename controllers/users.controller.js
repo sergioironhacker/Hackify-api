@@ -46,3 +46,25 @@ module.exports.getCurrentUser = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   getUser(req.params.id, req, res, next)
 }
+
+
+
+// Función para eliminar la cuenta de usuario
+module.exports.deleteAccount = (req, res, next) => {
+  const userId = req.currentUserId; // Suponiendo que tienes acceso al ID del usuario desde req.user
+
+  // Eliminar el usuario de la base de datos
+  User.findByIdAndDelete(userId)
+    .then(deletedUser => {
+      if (!deletedUser) {
+        throw createError(StatusCodes.NOT_FOUND, 'User not found');
+      }
+
+      // Eliminar cualquier otro dato relacionado con el usuario, como archivos, registros, etc.
+      // Aquí puedes agregar la lógica adicional según sea necesario
+
+      // Envía una respuesta de éxito
+      res.status(StatusCodes.OK).json({ message: 'User account deleted successfully' });
+    })
+    .catch(next);
+};

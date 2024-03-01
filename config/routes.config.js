@@ -10,6 +10,7 @@ const ideasController = require('../controllers/ideas.controller'); // Controlad
 const messagesController = require('../controllers/messages.controller')
 
 
+
 // Auth
 router.post('/login', authController.login);
 
@@ -17,6 +18,10 @@ router.post('/login', authController.login);
 router.get('/users/me', authMiddleware.isAuthenticated, usersController.getCurrentUser)
 router.get('/users/:id', authMiddleware.isAuthenticated, usersController.getUser)
 router.post('/users', upload.single('avatar'), usersController.create);
+
+// delete acc
+
+router.delete('/delete-account', authMiddleware.isAuthenticated, usersController.deleteAccount);
 
 // Ideas
 router.get('/ideas', ideasController.getIdeas);
@@ -39,7 +44,7 @@ router.post('/likes/:ideaOwner/:idea', authMiddleware.isAuthenticated, likesCont
 router.post('/messages/send',  messagesController.sendMessage);
 
 // Obtener mensajes enviados por el usuario actual
-router.get('/messages/sent/:userId',    messagesController.getSentMessages);
+router.get('/messages/sent/:userId',  messagesController.getSentMessages);
 
 // Obtener mensajes recibidos por el usuario actual
 router.get('/messages/received/:userId',  messagesController.getReceivedMessages);
