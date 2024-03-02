@@ -23,13 +23,16 @@ router.post('/users', upload.single('avatar'), usersController.create);
 
 router.delete('/delete-account', authMiddleware.isAuthenticated, usersController.deleteAccount);
 
-// Ideas
+// Ideas CRUD
 router.get('/ideas', ideasController.getIdeas);
 router.post('/ideas/create', authMiddleware.isAuthenticated, ideasController.createIdea); // Ruta para crear el formulario
+router.get('/ideas/:id', ideasController.getIdeaDetail);
+router.put('/ideas/:id', ideasController.editIdea);
+router.delete('/ideas/:id', ideasController.deleteIdea);
 
 // buy 
 
-router.post('/ideas/checkout/:id', authMiddleware.isAuthenticated, productController.createCheckoutSession);
+router.post('/ideas/:id/checkout', authMiddleware.isAuthenticated, productController.createCheckoutSession);
 
 // Archive ideas
 router.post('/archived/:ideaOwner/:idea', authMiddleware.isAuthenticated, archivesController.toggleArchive);
