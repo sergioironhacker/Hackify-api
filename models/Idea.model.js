@@ -14,10 +14,16 @@ const ideaSchema = mongoose.Schema(
       type: Number,
       required: [true, 'Maximum contribution amount is required.']
     },
+    images: [{ type: String }],
+
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Referencia al modelo de usuario
       required: [true, 'User is required'],
+    },
+    contributionTotal: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Contribution', // Referencia al modelo de contribución
     }
   },
   {

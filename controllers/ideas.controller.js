@@ -10,15 +10,19 @@ module.exports.getIdeas = async (req, res, next) => {
   }
 };
 
-module.exports.createIdea = (req, res, next) => {
-  const { title, description, contributionMax } = req.body;
-  const userId = req.currentUserId;
-
-  Idea.create({ title, description, contributionMax, user: userId })
-    .then(createdIdea => {
-      res.status(StatusCodes.CREATED).json(createdIdea);
-    })
-    .catch(next);
+module.exports.createIdea = async (req, res, next) => {
+  try {
+    const { title, description, contributionMax } = req.body;
+    const userId = req.currentUserId;
+    let images = []
+    if (req.files) {
+      images = req.files.map(file => file.path);
+    }
+    const createdIdea = await Idea.create({ title, description, contributionMax, user: userId, images });
+    res.status(StatusCodes.CREATED).json(createdIdea);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports.getIdeaDetail = (req, res, next) => {
@@ -32,7 +36,6 @@ module.exports.getIdeaDetail = (req, res, next) => {
     })
     .catch(next)
 }
-
 
 module.exports.deleteIdea = (req, res, next) => {
   Idea.findByIdAndDelete(req.params.id)

@@ -1,20 +1,24 @@
 const createHttpError = require('http-errors');
 const { StatusCodes } = require('http-status-codes');
 const Idea = require('../models/Idea.model');
+const Contribution = require('../models/Contribution.model')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 module.exports.createCheckoutSession = async (req, res, next) => {
   const ideaId = req.params.id;
-  console.log('idea ID:', ideaId);
+  const contribution = req.body
+  console.log('contributionAmount:', contribution);
 
   try {
     const idea = await Idea.findById(ideaId);
+
     if (!idea) {
       throw createHttpError(StatusCodes.NOT_FOUND, 'Form not found');
     }
-
     const session = await stripe.checkout.sessions.create({
+      
       payment_method_types: ['card'],
+      
       line_items: [
         {
           price_data: {
@@ -22,8 +26,10 @@ module.exports.createCheckoutSession = async (req, res, next) => {
             product_data: {
               name: idea.title,
               description: idea.description,
+              images: idea.images,
             },
-            unit_amount: Math.max(parseInt(idea.contributionMax * 100), 50),
+            unit_amount: Math.max(parseInt(contribution.paymentAmount * 100), 50),
+
           },
           quantity: 1,
         },

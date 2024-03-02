@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const contributionSchema = mongoose.Schema(
   {
-    amount: {
+    paymentAmount: {
       type: Number,
       required: [true, "You must set a specified amount to contribute"],
     },
