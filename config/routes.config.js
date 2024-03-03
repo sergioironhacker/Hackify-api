@@ -5,9 +5,10 @@ const archivesController = require('../controllers/archives.controller');
 const likesController = require('../controllers/likes.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const upload = require('./storage.config');
-const productController = require('../controllers/product.controller')
+const productController = require('../controllers/product.controller');
 const ideasController = require('../controllers/ideas.controller'); // Controlador para obtener las ideas
-const messagesController = require('../controllers/messages.controller')
+const messageController = require('../controllers/message.controller'); // Controllador para mensages
+const chatController = require('../controllers/chat.controller'); // controlador de chat
 
 
 
@@ -43,23 +44,21 @@ router.post('/likes/:ideaOwner/:idea', authMiddleware.isAuthenticated, likesCont
 
 
 
-// Crear mensaje
-router.post('/messages/send',  messagesController.sendMessage);
+// 
 
-// Obtener mensajes enviados por el usuario actual
-router.get('/messages/sent/:userId',  messagesController.getSentMessages);
+/* MESSAGES */
+router.post('/message/create/:id', /* authMiddleware.isAuthenticated, */ messageController.createMessage);
+router.patch('/message/read/:id', /* authMiddleware.isAuthenticated, */ messageController.messageRead);
 
-// Obtener mensajes recibidos por el usuario actual
-router.get('/messages/received/:userId',  messagesController.getReceivedMessages);
+/* CHAT */
+router.get('/chats', /* authMiddleware.isAuthenticated, */ chatController.getAllChats);
+router.post('/chat/create/:id', /* authMiddleware.isAuthenticated, */ chatController.createChat);
+router.delete('/chat/delete/:id', /* authMiddleware.isAuthenticated, */ chatController.deleteChat);
+router.get('/chat/:id', /* authMiddleware.isAuthenticated, */ chatController.getCurrentChat);
 
-// Obtener detalles de un mensaje específico
-router.get('/messages/:id',  messagesController.getMessageDetails);
 
-// Marcar un mensaje como leído
-router.put('/messages/:id/mark-read',  messagesController.markMessageAsRead);
 
-// Eliminar un mensaje
-router.delete('/messages/:id', messagesController.deleteMessage);
+//
 
 
 
