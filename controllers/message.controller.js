@@ -1,10 +1,10 @@
-const Message = require('../models/message.model');
+const Message = require('../models/Message.model');
 const Chat = require('../models/chat.model');
 
 module.exports.createMessage = (req, res, next) => {
     const messageData = {
         ...req.body,
-        sender: req.currentUser,
+        sender: req.currentUserId,
         chat: req.params.id,
         date: new Date()
     }

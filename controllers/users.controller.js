@@ -18,8 +18,8 @@ module.exports.create = (req, res, next) => {
           .then(userCreated => {
             res.status(StatusCodes.CREATED).json(userCreated)
           })
-        }
-      })
+      }
+    })
     .catch(next)
 }
 
@@ -28,12 +28,12 @@ const getUser = (id, req, res, next) => {
   const profilePromise = User.findById(id)
     .populate({ path: 'likes', populate: { path: 'idea', populate: 'user' } });
 
-  Promise.all([ profilePromise, archivedPromise ])
-    .then(([ user, archivedCount ]) => {
+  Promise.all([profilePromise, archivedPromise])
+    .then(([user, archivedCount]) => {
       if (!user) {
         next(createError(StatusCodes.NOT_FOUND, 'User not found'))
       } else {
-        res.json({ data: user, archived: archivedCount })
+        res.json(user)
       }
     })
     .catch(next)

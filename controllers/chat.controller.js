@@ -1,9 +1,8 @@
-const Chat = require('../models/chat.model');   
+const Chat = require('../models/chat.model');
 
 module.exports.createChat = (req, res, next) => {
     const chatData = {
-        ...req.body,
-        users: [req.currentUser, req.params.id],
+        users: [req.currentUserId, req.params.id],
         date: new Date()
     }
 
@@ -15,7 +14,7 @@ module.exports.createChat = (req, res, next) => {
 }
 
 module.exports.getAllChats = (req, res, next) => {
-    Chat.find({ users: req.currentUser })
+    Chat.find({ users: req.currentUserId })
         .populate('messages')
         .populate('users')
         .then((chats) => {
@@ -30,8 +29,8 @@ module.exports.getCurrentChat = (req, res, next) => {
         .populate({
             path: 'messages',
             populate: {
-                path: 'sender', 
-                model: 'User' 
+                path: 'sender',
+                model: 'User'
             }
         })
         .then((chat) => {
@@ -43,7 +42,7 @@ module.exports.getCurrentChat = (req, res, next) => {
 module.exports.deleteChat = (req, res, next) => {
     Chat.findByIdAndDelete(req.params.id)
         .then((chat) => {
-            res.status(204).json({status: "ok"})
+            res.status(204).json({ status: "ok" })
         })
         .catch(next)
 }
