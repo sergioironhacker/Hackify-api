@@ -18,12 +18,12 @@ const ideaSchema = mongoose.Schema(
 
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Referencia al modelo de usuario
+      ref: 'User',
       required: [true, 'User is required'],
     },
-    contributionTotal: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Contribution', // Referencia al modelo de contribución
+    contributionTotal: {  //////////////////////////////////
+      type: mongoose.Schema.Types.ObjectId, ////////////////////////////
+      ref: 'Contribution', // Referencia al modelo de contribución que va a ser un array de strings 
     }
   },
   {
