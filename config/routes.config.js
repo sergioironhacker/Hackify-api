@@ -34,6 +34,7 @@ router.delete('/ideas/:id', ideasController.deleteIdea);
 // buy 
 
 router.post('/ideas/:id/checkout', authMiddleware.isAuthenticated, productController.createCheckoutSession);
+router.post('/ideas/:ideaId/contributions/:amount', authMiddleware.isAuthenticated, productController.createContribution);
 
 // Archive ideas
 router.post('/archived/:ideaOwner/:idea', authMiddleware.isAuthenticated, archivesController.toggleArchive);

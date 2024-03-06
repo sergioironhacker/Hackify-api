@@ -11,11 +11,6 @@ const contributionSchema = mongoose.Schema(
       ref: "Idea",
       required: [true, "Required field"],
     },
-    ideaOwner: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
-      required: [true, "Required field"],
-    },
     contributingUser: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
