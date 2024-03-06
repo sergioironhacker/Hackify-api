@@ -28,7 +28,7 @@ router.delete('/delete-account', authMiddleware.isAuthenticated, usersController
 router.get('/ideas', ideasController.getIdeas);
 router.post('/ideas/create', authMiddleware.isAuthenticated, upload.array('images', 5), ideasController.createIdea);
 router.get('/ideas/:id', ideasController.getIdeaDetail);
-router.put('/ideas/:id', ideasController.editIdea);
+router.put('/ideas/:id', authMiddleware.isAuthenticated, upload.array('images', 5), ideasController.editIdea);
 router.delete('/ideas/:id', ideasController.deleteIdea);
 
 // buy 

@@ -1,30 +1,30 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const ideaSchema = mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'Idea title is required.'],
+      required: [true, "Idea title is required."],
     },
     description: {
       type: String,
-      required: [true, 'Idea description is required.'],
+      required: [true, "Idea description is required."],
     },
     contributionMax: {
       type: Number,
-      required: [true, 'Maximum contribution amount is required.']
+      required: [true, "Maximum contribution amount is required."],
     },
     images: [{ type: String }],
 
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'User is required'],
+      ref: "User",
+      required: [true, "User is required"],
     },
-    contributionTotal: {  //////////////////////////////////
-      type: mongoose.Schema.Types.ObjectId, ////////////////////////////
-      ref: 'Contribution', // Referencia al modelo de contribución que va a ser un array de strings 
-    }
+    contributionTotal: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -40,6 +40,6 @@ const ideaSchema = mongoose.Schema(
   }
 );
 
-const Idea = mongoose.model('Idea', ideaSchema);
+const Idea = mongoose.model("Idea", ideaSchema);
 
 module.exports = Idea;
