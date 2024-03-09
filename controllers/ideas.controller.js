@@ -1,5 +1,7 @@
 const Idea = require('../models/Idea.model');
 const { StatusCodes } = require('http-status-codes');
+const createError = require('http-errors');
+const presetCategories = require('../misc/categories');
 
 module.exports.getIdeas = async (req, res, next) => {
   try {
@@ -12,21 +14,39 @@ module.exports.getIdeas = async (req, res, next) => {
 
 module.exports.createIdea = async (req, res, next) => {
   try {
-    const { title, description, contributionMax } = req.body;
+    const { title, description, fullDescription, contributionMax, contributionLimitActive, categories, timeLimit, location } = req.body;
     const userId = req.currentUserId;
-    let images = []
+    let images = [];
     if (req.files) {
       images = req.files.map(file => file.path);
     }
+
+    // Validate contribution limit
+    if (contributionLimitActive && contributionMax < 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'ContributionMax should be a positive number.' });
+    }
+
+/*     // Validate categories
+    const invalidCategories = categories.filter(category => !presetCategories.includes(category));
+    if (invalidCategories.length > 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: `Invalid category selected: ${invalidCategories.join(', ')}` });
+    } */
+
     const createdIdea = await Idea.create({
       title,
       description,
+      fullDescription,
       contributionMax,
-      user: userId,
+      contributionLimitActive,
+      categories: Array.isArray(categories) ? categories : [categories], // Ensure it's an array
+      timeLimit,
+      location,
       images,
+      user: userId,
       contributionTotal: 0,
     });
     
+
     res.status(StatusCodes.CREATED).json(createdIdea);
   } catch (error) {
     next(error);
@@ -37,30 +57,30 @@ module.exports.getIdeaDetail = (req, res, next) => {
   Idea.findById(req.params.id)
     .then((idea) => {
       if (!idea) {
-        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'))
+        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
       } else {
-        res.status(StatusCodes.OK).json(idea)
+        res.status(StatusCodes.OK).json(idea);
       }
     })
-    .catch(next)
-}
+    .catch(next);
+};
 
 module.exports.deleteIdea = (req, res, next) => {
   Idea.findByIdAndDelete(req.params.id)
     .then((idea) => {
       if (!idea) {
-        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'))
+        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
       } else {
         res.status(StatusCodes.NO_CONTENT).json();
       }
     })
-    .catch(next)
-}
+    .catch(next);
+};
 
 module.exports.editIdea = async (req, res, next) => {
   try {
     const ideaId = req.params.id;
-    const { title, description, contributionMax } = req.body;
+    const { title, description, fullDescription, contributionMax, contributionLimitActive, categories, timeLimit, location } = req.body;
     const userId = req.currentUserId;
 
     // Check if new files are provided
@@ -76,6 +96,12 @@ module.exports.editIdea = async (req, res, next) => {
       return res.status(StatusCodes.NOT_FOUND).json({ error: 'Idea not found' });
     }
 
+ /*    // Validate categories
+    const invalidCategories = categories.filter(category => !presetCategories.includes(category));
+    if (invalidCategories.length > 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: `Invalid category selected: ${invalidCategories.join(', ')}` });
+    } */
+
     // Combine existing images with new images
     const updatedImages = [...existingIdea.images, ...newImages];
 
@@ -85,7 +111,12 @@ module.exports.editIdea = async (req, res, next) => {
       {
         title,
         description,
+        fullDescription,
         contributionMax,
+        contributionLimitActive,
+        categories,
+        timeLimit,
+        location,
         user: userId,
         images: updatedImages,
       },
@@ -93,6 +124,33 @@ module.exports.editIdea = async (req, res, next) => {
     );
 
     res.status(StatusCodes.OK).json(updatedIdea);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Fetch categories
+module.exports.getCategories = async (req, res, next) => {
+  try {
+    res.status(StatusCodes.OK).json(presetCategories);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// Fetch ideas by category
+module.exports.getIdeasByCategory = async (req, res, next) => {
+  try {
+    const { category } = req.params;
+
+    // Validate category
+    if (!presetCategories.includes(category)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: `Invalid category: ${category}` });
+    }
+
+    const ideas = await Idea.find({ categories: category }).populate('user');
+    res.status(StatusCodes.OK).json(ideas);
   } catch (error) {
     next(error);
   }

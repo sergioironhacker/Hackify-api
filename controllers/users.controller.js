@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const createError = require('http-errors');
 const User = require("../models/User.model")
-const Archive = require('../models/Archive.model');
+const Bookmark = require('../models/Bookmark.model');
 
 module.exports.create = (req, res, next) => {
   const userToCreate = {
@@ -24,12 +24,12 @@ module.exports.create = (req, res, next) => {
 }
 
 const getUser = (id, req, res, next) => {
-  const archivedPromise = Archive.countDocuments({ archived: id });
+  const bookmarkedPromise = Bookmark.countDocuments({ bookmarked: id });
   const profilePromise = User.findById(id)
     .populate({ path: 'likes', populate: { path: 'idea', populate: 'user' } });
 
-  Promise.all([profilePromise, archivedPromise])
-    .then(([user, archivedCount]) => {
+  Promise.all([profilePromise, bookmarkedPromise])
+    .then(([user, bookmarkedCount]) => {
       if (!user) {
         next(createError(StatusCodes.NOT_FOUND, 'User not found'))
       } else {
@@ -46,8 +46,6 @@ module.exports.getCurrentUser = (req, res, next) => {
 module.exports.getUser = (req, res, next) => {
   getUser(req.params.id, req, res, next)
 }
-
-
 
 // Función para eliminar la cuenta de usuario
 module.exports.deleteAccount = (req, res, next) => {

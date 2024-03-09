@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const archiveSchema = mongoose.Schema(
+const bookmarkSchema = mongoose.Schema(
   {
-    archiver: {
+    bookmarker: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: [true, 'Required field'],
     },
-    archivedIdea: {
+    bookmarkedIdea: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Idea',
       required: [true, 'Required field'],
@@ -27,6 +27,6 @@ const archiveSchema = mongoose.Schema(
   },
 );
 
-const Archive = mongoose.model('Archive', archiveSchema);
+const Bookmark = mongoose.model('Bookmark', bookmarkSchema);
 
-module.exports = Archive;
+module.exports = Bookmark;
