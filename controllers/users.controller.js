@@ -66,4 +66,10 @@ module.exports.deleteAccount = (req, res, next) => {
       res.status(StatusCodes.OK).json({ message: 'User account deleted successfully' });
     })
     .catch(next);
+
+
+
+
+
+    
 };

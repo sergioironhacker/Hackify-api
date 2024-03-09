@@ -60,6 +60,8 @@ router.get('/chat/:id',  authMiddleware.isAuthenticated,  chatController.getCurr
 
 //
 
+/* router.get('/ideas/me', authMiddleware.isAuthenticated, usersController.) */
+
 
 
 //////////////// busqueda 
