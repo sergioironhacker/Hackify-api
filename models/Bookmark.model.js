@@ -2,14 +2,19 @@ const mongoose = require('mongoose');
 
 const bookmarkSchema = mongoose.Schema(
   {
-    bookmarker: {
+    idea: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Idea',
+      required: [true, 'Required field']
+    },
+    ideaOwner: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: [true, 'Required field'],
     },
-    bookmarkedIdea: {
+    bookmarker: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Idea',
+      ref: 'User',
       required: [true, 'Required field'],
     }
   },

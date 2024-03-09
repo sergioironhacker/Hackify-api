@@ -24,12 +24,11 @@ module.exports.create = (req, res, next) => {
 }
 
 const getUser = (id, req, res, next) => {
-  const bookmarkedPromise = Bookmark.countDocuments({ bookmarked: id });
   const profilePromise = User.findById(id)
     .populate('ideas');
  
-  Promise.all([profilePromise, bookmarkedPromise])
-    .then(([user, bookmarkedCount]) => {
+  Promise.all([profilePromise])
+    .then(([user]) => {
       if (!user) {
         next(createError(StatusCodes.NOT_FOUND, 'User not found'))
       } else {

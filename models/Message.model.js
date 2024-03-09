@@ -6,11 +6,11 @@ const messageSchema = new mongoose.Schema({
         required: true
     },
     sender: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: 'User'
     },
     chat: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: 'Chat'
     },
     date: {

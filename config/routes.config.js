@@ -42,9 +42,7 @@ router.get('/categories', ideasController.getCategories);
 router.get('/ideas/category/:category', authMiddleware.isAuthenticated, ideasController.getIdeasByCategory);
 
 // Bookmark ideas
-router.post('/bookmarked/:ideaOwner/:idea', authMiddleware.isAuthenticated, bookmarksController.toggleBookmark);
-router.get('/bookmarked', authMiddleware.isAuthenticated, bookmarksController.getBookmarkedIdeas);
-
+router.post('/bookmarks/:ideaOwner/:idea', authMiddleware.isAuthenticated, bookmarksController.toggleBookmark);
 
 /* MESSAGES */
 router.post('/message/create/:id', authMiddleware.isAuthenticated, messageController.createMessage);

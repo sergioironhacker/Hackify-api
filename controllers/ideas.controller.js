@@ -4,47 +4,6 @@ const createError = require('http-errors');
 const presetCategories = require('../misc/categories');
 const Bookmark = require('../models/Bookmark.model');
 
-module.exports.getIdeas = async (req, res, next) => {
-  try {
-    const ideas = await Idea.find().populate('user');
-    res.status(StatusCodes.OK).json(ideas);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const getUserIdeasById = (id, req, res, next) => {
-  Idea.find({ user: id }).sort({ createdAt: 'desc' })
-    .populate('user')
-    .then(ideas => {
-      const ideaBookmarkPromises = ideas.map(idea => {
-        return Bookmark.countDocuments({ idea: idea.id }) // [3, 0, 50, 100]
-      })
-
-      return Promise.all(ideaBookmarkPromises)
-        .then(bookmarksPerIdea => { // [3, 0, 50, 100]
-          const response = bookmarksPerIdea.map((numBookmarks, index) => {
-            return {
-              data: ideas[index],
-              Bookmarks: numBookmarks,
-            }
-          })
-
-          res.json(response)
-        })
-    })
-    .catch(next)
-}
-
-module.exports.getCurrentUserIdeas = (req, res, next) => {
-  getUserIdeasById(req.currentUserId, req, res, next)
-}
-
-module.exports.getUserIdeas = (req, res, next) => {
-  getUserIdeasById(req.params.id, req, res, next)
-}
-
-
 module.exports.createIdea = async (req, res, next) => {
   try {
     const { title, description, fullDescription, contributionMax, contributionLimitActive, categories, timeLimit, location } = req.body;
@@ -58,8 +17,6 @@ module.exports.createIdea = async (req, res, next) => {
     if (contributionLimitActive && contributionMax < 0) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: 'ContributionMax should be a positive number.' });
     }
-
-
 
     const createdIdea = await Idea.create({
       title,
@@ -75,35 +32,11 @@ module.exports.createIdea = async (req, res, next) => {
       contributionTotal: 0,
     });
     
-
+    
     res.status(StatusCodes.CREATED).json(createdIdea);
   } catch (error) {
     next(error);
   }
-};
-
-module.exports.getIdeaDetail = (req, res, next) => {
-  Idea.findById(req.params.id)
-    .then((idea) => {
-      if (!idea) {
-        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
-      } else {
-        res.status(StatusCodes.OK).json(idea);
-      }
-    })
-    .catch(next);
-};
-
-module.exports.deleteIdea = (req, res, next) => {
-  Idea.findByIdAndDelete(req.params.id)
-    .then((idea) => {
-      if (!idea) {
-        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
-      } else {
-        res.status(StatusCodes.NO_CONTENT).json();
-      }
-    })
-    .catch(next);
 };
 
 module.exports.editIdea = async (req, res, next) => {
@@ -150,6 +83,87 @@ module.exports.editIdea = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+module.exports.deleteIdea = (req, res, next) => {
+  Idea.findByIdAndDelete(req.params.id)
+    .then((idea) => {
+      if (!idea) {
+        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
+      } else {
+        res.status(StatusCodes.NO_CONTENT).json();
+      }
+    })
+    .catch(next);
+};
+
+module.exports.getIdeas = async (req, res, next) => {
+  try {
+    const ideas = await Idea.find().populate('user');
+    res.status(StatusCodes.OK).json(ideas);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const addBookmarksToIdeas = (ideas) => {
+  const ideaBookmarkPromises = ideas.map(idea => {
+    return Bookmark.countDocuments({ idea: idea.id })
+  })
+
+  return Promise.all(ideaBookmarkPromises)
+    .then(bookmarksPerIdea => {
+      const response = bookmarksPerIdea.map((numBookmarks, index) => {
+        return {
+          data: ideas[index],
+          bookmarks: numBookmarks,
+        }
+      })
+      return response
+  })
+}
+
+const getUserIdeasById = (id, req, res, next) => {
+  Idea.find({ user: id }).sort({ createdAt: 'desc' })
+    .populate('user')
+    .sort({ createdAt: 'desc' })
+    .then(ideas => {
+      addBookmarksToIdeas(ideas)
+
+      return Promise.all(ideaBookmarkPromises)
+        .then(bookmarksPerIdea => {
+          const response = bookmarksPerIdea.map((numBookmarks, index) => {
+            return {
+              data: ideas[index],
+              likes: numBookmarks,
+            }
+          })
+          res.json(response)
+        })
+        
+    })
+    .catch(next)
+}
+
+
+module.exports.getCurrentUserIdeas = (req, res, next) => {
+  getUserIdeasById(req.currentUserId, req, res, next)
+}
+
+module.exports.getUserIdeas = (req, res, next) => {
+  getUserIdeasById(req.params.id, req, res, next)
+}
+
+module.exports.getIdeaDetail = (req, res, next) => {
+  Idea.findById(req.params.id)
+    .then((idea) => {
+      if (!idea) {
+        next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
+      } else {
+        res.status(StatusCodes.OK).json(idea);
+      }
+    })
+    .catch(next);
 };
 
 // Fetch categories

@@ -65,7 +65,7 @@ userSchema.virtual('contributions', {
   justOne: false
 })
 
-userSchema.virtual('bookmarkedIdeas', {
+userSchema.virtual('bookmarks', {
   ref: 'Bookmark',
   localField: '_id',
   foreignField: 'bookmarker',

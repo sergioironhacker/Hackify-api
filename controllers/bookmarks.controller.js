@@ -1,24 +1,19 @@
 const { StatusCodes } = require("http-status-codes");
-const createError = require('http-errors');
 const Bookmark = require("../models/Bookmark.model");
 
 module.exports.toggleBookmark = (req, res, next) => {
-  const bookmarker = req.currentUserId;
-  const bookmarkedIdea = req.params.ideaId;
+  const { idea, ideaOwner } = req.params
 
-  // Lo primero compruebo si ya has guardado esa idea
-  Bookmark.findOne({ bookmarker, bookmarkedIdea })
+  const queryData = { bookmarker: req.currentUserId, idea, ideaOwner }
+  
+  Bookmark.findOne(queryData)
     .then(bookmark => {
       if (bookmark) {
-        // Tendre que borrarlo, porque quiero desactivar ese guardado
-        return Bookmark.findOneAndDelete({ bookmarker, bookmarkedIdea })
-          .then(() => {
-            res.status(StatusCodes.NO_CONTENT).json({})
-          })
+        Bookmark.findOneAndDelete(queryData)
+          .then(() => res.status(StatusCodes.NO_CONTENT).json({}))
       } else {
-        // Tengo que crear el guardado
-        return Bookmark.create({ bookmarker, bookmarkedIdea })
-          .then((bookmark) => {
+        Bookmark.create(queryData)
+          .then(bookmark => {
             res.status(StatusCodes.CREATED).json(bookmark)
           })
       }

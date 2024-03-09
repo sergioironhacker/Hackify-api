@@ -57,16 +57,16 @@ const ideaSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    likes: [
+    bookmarks: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: "User",
       },
     ],
     comments: [
       {
         user: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.SchemaTypes.ObjectId,
           ref: "User",
         },
         content: {
