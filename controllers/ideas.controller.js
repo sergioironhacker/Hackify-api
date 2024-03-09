@@ -2,6 +2,7 @@ const Idea = require('../models/Idea.model');
 const { StatusCodes } = require('http-status-codes');
 const createError = require('http-errors');
 const presetCategories = require('../misc/categories');
+const Bookmark = require('../models/Bookmark.model');
 
 module.exports.getIdeas = async (req, res, next) => {
   try {
@@ -11,6 +12,38 @@ module.exports.getIdeas = async (req, res, next) => {
     next(error);
   }
 };
+
+const getUserIdeasById = (id, req, res, next) => {
+  Idea.find({ user: id }).sort({ createdAt: 'desc' })
+    .populate('user')
+    .then(ideas => {
+      const ideaBookmarkPromises = ideas.map(idea => {
+        return Bookmark.countDocuments({ idea: idea.id }) // [3, 0, 50, 100]
+      })
+
+      return Promise.all(ideaBookmarkPromises)
+        .then(bookmarksPerIdea => { // [3, 0, 50, 100]
+          const response = bookmarksPerIdea.map((numBookmarks, index) => {
+            return {
+              data: ideas[index],
+              Bookmarks: numBookmarks,
+            }
+          })
+
+          res.json(response)
+        })
+    })
+    .catch(next)
+}
+
+module.exports.getCurrentUserIdeas = (req, res, next) => {
+  getUserIdeasById(req.currentUserId, req, res, next)
+}
+
+module.exports.getUserIdeas = (req, res, next) => {
+  getUserIdeasById(req.params.id, req, res, next)
+}
+
 
 module.exports.createIdea = async (req, res, next) => {
   try {
@@ -26,11 +59,7 @@ module.exports.createIdea = async (req, res, next) => {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: 'ContributionMax should be a positive number.' });
     }
 
-/*     // Validate categories
-    const invalidCategories = categories.filter(category => !presetCategories.includes(category));
-    if (invalidCategories.length > 0) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ error: `Invalid category selected: ${invalidCategories.join(', ')}` });
-    } */
+
 
     const createdIdea = await Idea.create({
       title,
@@ -95,12 +124,6 @@ module.exports.editIdea = async (req, res, next) => {
     if (!existingIdea) {
       return res.status(StatusCodes.NOT_FOUND).json({ error: 'Idea not found' });
     }
-
- /*    // Validate categories
-    const invalidCategories = categories.filter(category => !presetCategories.includes(category));
-    if (invalidCategories.length > 0) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ error: `Invalid category selected: ${invalidCategories.join(', ')}` });
-    } */
 
     // Combine existing images with new images
     const updatedImages = [...existingIdea.images, ...newImages];

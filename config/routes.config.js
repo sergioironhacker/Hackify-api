@@ -2,7 +2,6 @@ const router = require('express').Router();
 const usersController = require('../controllers/users.controller');
 const authController = require('../controllers/auth.controller');
 const bookmarksController = require('../controllers/bookmarks.controller');
-const likesController = require('../controllers/likes.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const upload = require('./storage.config');
 const productController = require('../controllers/product.controller');
@@ -30,6 +29,8 @@ router.post('/ideas/create', authMiddleware.isAuthenticated, upload.array('image
 router.get('/ideas/:id', authMiddleware.isAuthenticated, ideasController.getIdeaDetail);
 router.put('/ideas/:id', authMiddleware.isAuthenticated, upload.array('images', 5), ideasController.editIdea);
 router.delete('/ideas/:id', authMiddleware.isAuthenticated, ideasController.deleteIdea);
+router.get('/ideas/:id', ideasController.getUserIdeas);
+router.get('/ideas/me', authMiddleware.isAuthenticated, ideasController.getCurrentUserIdeas);
 
 // buy 
 
@@ -44,12 +45,6 @@ router.get('/ideas/category/:category', authMiddleware.isAuthenticated, ideasCon
 router.post('/bookmarked/:ideaOwner/:idea', authMiddleware.isAuthenticated, bookmarksController.toggleBookmark);
 router.get('/bookmarked', authMiddleware.isAuthenticated, bookmarksController.getBookmarkedIdeas);
 
-// Likes
-router.post('/likes/:ideaOwner/:idea', authMiddleware.isAuthenticated, likesController.toggleLike);
-
-
-
-// 
 
 /* MESSAGES */
 router.post('/message/create/:id', authMiddleware.isAuthenticated, messageController.createMessage);

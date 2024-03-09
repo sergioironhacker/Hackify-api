@@ -26,8 +26,8 @@ module.exports.create = (req, res, next) => {
 const getUser = (id, req, res, next) => {
   const bookmarkedPromise = Bookmark.countDocuments({ bookmarked: id });
   const profilePromise = User.findById(id)
-    .populate({ path: 'likes', populate: { path: 'idea', populate: 'user' } });
-
+    .populate('ideas');
+ 
   Promise.all([profilePromise, bookmarkedPromise])
     .then(([user, bookmarkedCount]) => {
       if (!user) {
@@ -44,6 +44,7 @@ module.exports.getCurrentUser = (req, res, next) => {
 }
 
 module.exports.getUser = (req, res, next) => {
+  console.log('entro aqui')
   getUser(req.params.id, req, res, next)
 }
 

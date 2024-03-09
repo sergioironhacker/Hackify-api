@@ -44,6 +44,13 @@ const userSchema = mongoose.Schema(
     },
   }
 );
+
+userSchema.virtual('ideas', {
+  ref: 'Idea',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false
+}),
 userSchema.virtual('likes', {
   ref: 'Like',
   localField: '_id',
@@ -58,10 +65,10 @@ userSchema.virtual('contributions', {
   justOne: false
 })
 
-userSchema.virtual('archivedIdeas', {
-  ref: 'Archive',
+userSchema.virtual('bookmarkedIdeas', {
+  ref: 'Bookmark',
   localField: '_id',
-  foreignField: 'archiver',
+  foreignField: 'bookmarker',
   justOne: false
 }
 )
