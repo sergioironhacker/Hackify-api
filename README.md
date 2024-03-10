@@ -1,4 +1,4 @@
-# OnlyHack-api
+# Hackify
 
 ## Descripción
 OnlyHack API es un backend desarrollado con Node.js, Express y MongoDB para proporcionar funcionalidades relacionadas con la gestión de datos para la plataforma OnlyHack.
