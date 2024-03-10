@@ -5,10 +5,9 @@ const bookmarksController = require('../controllers/bookmarks.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const upload = require('./storage.config');
 const productController = require('../controllers/product.controller');
-const ideasController = require('../controllers/ideas.controller'); // Controlador para obtener las ideas
-const messageController = require('../controllers/message.controller'); // Controllador para mensages
-const chatController = require('../controllers/chat.controller'); // controlador de chat
-
+const ideasController = require('../controllers/ideas.controller'); 
+const messageController = require('../controllers/message.controller'); 
+const chatController = require('../controllers/chat.controller'); 
 
 
 // Auth
@@ -54,17 +53,6 @@ router.post('/chat/create/:id', authMiddleware.isAuthenticated, chatController.c
 router.delete('/chat/delete/:id',  authMiddleware.isAuthenticated,  chatController.deleteChat);
 router.get('/chat/:id',  authMiddleware.isAuthenticated,  chatController.getCurrentChat);
 
-
-
-//
-
-/* router.get('/ideas/me', authMiddleware.isAuthenticated, usersController.) */
-
-
-
-//////////////// busqueda 
-
-/* router.get('/search', ideasController.searchIdeas); */
 
 
 ////////////////////

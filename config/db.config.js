@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB_NAME = "Onlyhack";
+const DB_NAME = "Hackify";
 const URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017";
 const DB_URI = `${URI}/${DB_NAME}`;
 
