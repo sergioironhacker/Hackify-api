@@ -10,6 +10,12 @@ const messageController = require('../controllers/message.controller');
 const chatController = require('../controllers/chat.controller'); 
 
 
+
+
+/// ruta para mostrar el total de contribuciones 
+
+router.get('/ideas/total-contributions',authMiddleware.isAuthenticated, ideasController.getTotalContributions);
+
 // Auth
 router.post('/login', authController.login);
 
@@ -52,6 +58,9 @@ router.get('/chats', authMiddleware.isAuthenticated, chatController.getAllChats)
 router.post('/chat/create/:id', authMiddleware.isAuthenticated, chatController.createChat);
 router.delete('/chat/delete/:id',  authMiddleware.isAuthenticated,  chatController.deleteChat);
 router.get('/chat/:id',  authMiddleware.isAuthenticated,  chatController.getCurrentChat);
+
+
+
 
 
 

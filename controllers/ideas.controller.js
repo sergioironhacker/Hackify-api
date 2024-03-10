@@ -3,6 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const createError = require('http-errors');
 const presetCategories = require('../misc/categories');
 const Bookmark = require('../models/Bookmark.model');
+const Contribution = require('../models/Contribution.model'); /// modelo de contribuiones
 
 module.exports.createIdea = async (req, res, next) => {
   try {
@@ -190,5 +191,28 @@ module.exports.getIdeasByCategory = async (req, res, next) => {
     res.status(StatusCodes.OK).json(ideas);
   } catch (error) {
     next(error);
+  }
+};
+
+
+
+// controlador para mostrar el total de contribuciones 
+
+exports.getTotalContributions = async (req, res) => {
+  try {
+    const totalContributions = await Contribution.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$paymentAmount' } 
+        }
+      }
+    ]);
+    if (totalContributions.length === 0) {
+      return res.status(404).json({ error: 'No contributions found' });
+    }
+    res.status(200).json({ totalContributions: totalContributions[0].total });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
