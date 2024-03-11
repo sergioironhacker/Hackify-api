@@ -47,22 +47,17 @@ const ideaSchema = mongoose.Schema(
       },
     },
     images: [{ type: String }],
-
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
-      required: [true, "User is required"],
+      required: true
     },
+
     contributionTotal: {
       type: Number,
       default: 0,
     },
-    bookmarks: [
-      {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "User",
-      },
-    ],
+    
     comments: [
       {
         user: {
@@ -96,9 +91,26 @@ const ideaSchema = mongoose.Schema(
   }
 );
 
+
+ideaSchema.virtual("contributions", {
+  ref: "Contribution",
+  localField: "_id",
+  foreignField: "idea",
+  justOne: false,
+});
+ideaSchema.virtual("bookmarks", {
+  ref: "Bookmark",
+  localField: "_id",
+  foreignField: "bookmarkedIdea",
+  justOne: false,
+});
+
 // Validation to check contribution limit
 ideaSchema.pre("save", function (next) {
-  if (this.contributionLimitActive && this.contributionTotal > this.contributionMax) {
+  if (
+    this.contributionLimitActive &&
+    this.contributionTotal > this.contributionMax
+  ) {
     const error = new Error("Contribution limit exceeded.");
     return next(error);
   }

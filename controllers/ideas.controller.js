@@ -100,51 +100,44 @@ module.exports.deleteIdea = (req, res, next) => {
 
 module.exports.getIdeas = async (req, res, next) => {
   try {
-    const ideas = await Idea.find().populate('user');
+    const ideas = await Idea.find().populate('user bookmarks contributions');
     res.status(StatusCodes.OK).json(ideas);
   } catch (error) {
     next(error);
   }
 };
 
-const addBookmarksToIdeas = (ideas) => {
+const addBookmarksToIdeas = async (ideas) => {
   const ideaBookmarkPromises = ideas.map(idea => {
-    return Bookmark.countDocuments({ idea: idea.id })
-  })
+    return Bookmark.countDocuments({ idea: idea.id });
+  });
 
-  return Promise.all(ideaBookmarkPromises)
-    .then(bookmarksPerIdea => {
-      const response = bookmarksPerIdea.map((numBookmarks, index) => {
-        return {
-          data: ideas[index],
-          bookmarks: numBookmarks,
-        }
-      })
-      return response
-  })
-}
+  const bookmarksPerIdea = await Promise.all(ideaBookmarkPromises);
 
-const getUserIdeasById = (id, req, res, next) => {
-  Idea.find({ user: id }).sort({ createdAt: 'desc' })
-    .populate('user')
-    .sort({ createdAt: 'desc' })
-    .then(ideas => {
-      addBookmarksToIdeas(ideas)
+  const populatedIdeas = await Idea.populate(ideas, { path: 'user bookmarks contributions' });
 
-      return Promise.all(ideaBookmarkPromises)
-        .then(bookmarksPerIdea => {
-          const response = bookmarksPerIdea.map((numBookmarks, index) => {
-            return {
-              data: ideas[index],
-              likes: numBookmarks,
-            }
-          })
-          res.json(response)
-        })
-        
-    })
-    .catch(next)
-}
+  const response = populatedIdeas.map((idea, index) => {
+    return {
+      data: idea,
+      bookmarks: bookmarksPerIdea[index],
+    };
+  });
+
+  return response;
+};
+
+
+const getUserIdeasById = async (id, req, res, next) => {
+  try {
+    const ideas = await Idea.find({ user: id }).sort({ createdAt: 'desc' }).populate('user bookmarks contributions');
+    const populatedIdeas = await addBookmarksToIdeas(ideas);
+
+    res.json(populatedIdeas);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 
 module.exports.getCurrentUserIdeas = (req, res, next) => {
@@ -157,7 +150,8 @@ module.exports.getUserIdeas = (req, res, next) => {
 
 module.exports.getIdeaDetail = (req, res, next) => {
   Idea.findById(req.params.id)
-    .then((idea) => {
+  .then((idea) => {
+      console.log('idea', idea);
       if (!idea) {
         next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
       } else {
@@ -187,7 +181,7 @@ module.exports.getIdeasByCategory = async (req, res, next) => {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: `Invalid category: ${category}` });
     }
 
-    const ideas = await Idea.find({ categories: category }).populate('user');
+    const ideas = await Idea.find({ categories: category }).populate('user bookmarks contributions');
     res.status(StatusCodes.OK).json(ideas);
   } catch (error) {
     next(error);

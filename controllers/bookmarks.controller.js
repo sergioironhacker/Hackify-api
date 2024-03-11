@@ -2,9 +2,9 @@ const { StatusCodes } = require("http-status-codes");
 const Bookmark = require("../models/Bookmark.model");
 
 module.exports.toggleBookmark = (req, res, next) => {
-  const { idea, ideaOwner } = req.params
+  const { idea } = req.params
 
-  const queryData = { bookmarker: req.currentUserId, idea, ideaOwner }
+  const queryData = { bookmarker: req.currentUserId, idea }
   
   Bookmark.findOne(queryData)
     .then(bookmark => {
@@ -23,9 +23,9 @@ module.exports.toggleBookmark = (req, res, next) => {
 
 module.exports.getBookmarkedIdeas = (id, req, res, next) => {
   Bookmark.find({ bookmarker: id }) // Me traigo mis bookmarked
-    .populate('bookmarkedIdea')
+    .populate('idea')
     .then(bookmarks => {
-      res.json(bookmarks.map(bookmark => bookmark.bookmarkedIdea)); // En vez de enviar todo el objeto de bookmark, me mando el campo bookmarked
+      res.json(bookmarks.map(bookmark => bookmark.idea)); // En vez de enviar todo el objeto de bookmark, me mando el campo bookmarked
     })
     .catch(next)
 }

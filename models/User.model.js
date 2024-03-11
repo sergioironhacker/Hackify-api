@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const ROUNDS = 10;
 
@@ -10,14 +10,14 @@ const userSchema = mongoose.Schema(
     username: {
       type: String,
       unique: true,
-      required: [true, 'Required field'],
-      trim: true // para borrar espacios blancos innecesarios al principio o final de la palabra
+      required: [true, "Required field"],
+      trim: true, // para borrar espacios blancos innecesarios al principio o final de la palabra
     },
     email: {
       type: String,
       unique: true,
-      required: [true, 'Required field'],
-      match: [EMAIL_REGEX, 'Add a valid email'],
+      required: [true, "Required field"],
+      match: [EMAIL_REGEX, "Add a valid email"],
       trim: true,
       lowercase: true,
     },
@@ -28,7 +28,8 @@ const userSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: 'https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png'
+      default:
+        "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png",
     },
   },
   {
@@ -45,33 +46,24 @@ const userSchema = mongoose.Schema(
   }
 );
 
-userSchema.virtual('ideas', {
-  ref: 'Idea',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
-}),
-userSchema.virtual('likes', {
-  ref: 'Like',
-  localField: '_id',
-  foreignField: 'likingUser',
-  justOne: false
-})
-
-userSchema.virtual('contributions', {
-  ref: 'Contribution',
-  localField: '_id',
-  foreignField: 'contributingUser',
-  justOne: false
-})
-
-userSchema.virtual('bookmarks', {
-  ref: 'Bookmark',
-  localField: '_id',
-  foreignField: 'bookmarker',
-  justOne: false
-}
-)
+userSchema.virtual("ideas", {
+  ref: "Idea",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
+});
+userSchema.virtual("contributions", {
+  ref: "Contribution",
+  localField: "_id",
+  foreignField: "contributingUser",
+  justOne: false,
+});
+userSchema.virtual("bookmarks", {
+  ref: "Bookmark",
+  localField: "_id",
+  foreignField: "bookmarker",
+  justOne: false,
+});
 
 // Crear el metodo para comparar contraseñas
 
@@ -96,5 +88,5 @@ userSchema.pre("save", function (next) {
   }
 });
 
-const User = mongoose.model('User', userSchema);
-module.exports = User
+const User = mongoose.model("User", userSchema);
+module.exports = User;

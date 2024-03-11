@@ -25,8 +25,8 @@ module.exports.create = (req, res, next) => {
 
 const getUser = (id, req, res, next) => {
   const profilePromise = User.findById(id)
-    .populate('ideas');
- 
+    .populate('ideas bookmarks contributions');
+
   Promise.all([profilePromise])
     .then(([user]) => {
       if (!user) {
@@ -38,12 +38,12 @@ const getUser = (id, req, res, next) => {
     .catch(next)
 }
 
+
 module.exports.getCurrentUser = (req, res, next) => {
   getUser(req.currentUserId, req, res, next);
 }
 
 module.exports.getUser = (req, res, next) => {
-  console.log('entro aqui')
   getUser(req.params.id, req, res, next)
 }
 
