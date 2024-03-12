@@ -207,3 +207,25 @@ exports.getTotalContributions = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+// Función para obtener las ideas en las que un usuario ha contribuido
+exports.getUserContributedIdeas = async (req, res) => {
+  try {
+    
+    const { userId } = req.params;
+
+    console.log('User ID:', userId);
+
+
+    const contributedIdeas = await Contribution.find({ contributingUser: userId }).populate('idea');
+
+    console.log('Contributed ideas:', contributedIdeas);
+
+    res.status(200).json(contributedIdeas);
+  } catch (error) {
+    console.error('Error fetching contributed ideas:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

@@ -16,6 +16,10 @@ const chatController = require('../controllers/chat.controller');
 
 router.get('/ideas/total-contributions',authMiddleware.isAuthenticated, ideasController.getTotalContributions);
 
+
+/////////////////////// intento traer las ideas en las que el usuario a contribuido 
+router.get('/ideas/contributed/:userId', authMiddleware.isAuthenticated, ideasController.getUserContributedIdeas);
+
 // Auth
 router.post('/login', authController.login);
 
