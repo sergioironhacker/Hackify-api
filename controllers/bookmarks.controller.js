@@ -23,7 +23,7 @@ module.exports.toggleBookmark = (req, res, next) => {
 
 module.exports.getBookmarkedIdeas = (id, req, res, next) => {
   Bookmark.find({ bookmarker: id }) // Me traigo mis bookmarked
-    .populate('idea')
+    .populate('user idea')
     .then(bookmarks => {
       res.json(bookmarks.map(bookmark => bookmark.idea)); // En vez de enviar todo el objeto de bookmark, me mando el campo bookmarked
     })

@@ -138,8 +138,6 @@ const getUserIdeasById = async (id, req, res, next) => {
   }
 };
 
-
-
 module.exports.getCurrentUserIdeas = (req, res, next) => {
   getUserIdeasById(req.currentUserId, req, res, next)
 }
@@ -151,7 +149,6 @@ module.exports.getUserIdeas = (req, res, next) => {
 module.exports.getIdeaDetail = (req, res, next) => {
   Idea.findById(req.params.id)
   .then((idea) => {
-      console.log('idea', idea);
       if (!idea) {
         next(createError(StatusCodes.NOT_FOUND, 'Idea not found'));
       } else {

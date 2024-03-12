@@ -101,7 +101,7 @@ ideaSchema.virtual("contributions", {
 ideaSchema.virtual("bookmarks", {
   ref: "Bookmark",
   localField: "_id",
-  foreignField: "bookmarkedIdea",
+  foreignField: "idea",
   justOne: false,
 });
 
