@@ -57,7 +57,7 @@ const ideaSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    
+
     comments: [
       {
         user: {
@@ -85,7 +85,6 @@ const ideaSchema = mongoose.Schema(
       transform: (doc, ret) => {
         ret.id = ret._id;
         delete ret.__v;
-        delete ret._id;
       },
     },
   }

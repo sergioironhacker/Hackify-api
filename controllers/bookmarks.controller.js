@@ -5,16 +5,16 @@ module.exports.toggleBookmark = (req, res, next) => {
   const { idea } = req.params
 
   const queryData = { bookmarker: req.currentUserId, idea }
-  
+
   Bookmark.findOne(queryData)
     .then(bookmark => {
       if (bookmark) {
         Bookmark.findOneAndDelete(queryData)
-          .then(() => res.status(StatusCodes.NO_CONTENT).json({}))
+          .then(() => res.status(StatusCodes.NO_CONTENT).json('eliminado'))
       } else {
         Bookmark.create(queryData)
           .then(bookmark => {
-            res.status(StatusCodes.CREATED).json(bookmark)
+            res.status(StatusCodes.CREATED).json('creado')
           })
       }
     })
