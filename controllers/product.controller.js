@@ -3,7 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const Idea = require('../models/Idea.model');
 const Contribution = require('../models/Contribution.model')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
+const VITE_URL= process.env.VITE_API_URL 
 
 module.exports.createCheckoutSession = async (req, res, next) => {
   const ideaId = req.params.id;
@@ -36,8 +36,8 @@ module.exports.createCheckoutSession = async (req, res, next) => {
         },
       ],
       mode: 'payment',
-      success_url: `http://localhost:5173/ideas/${ideaId}/contributions/${contribution.paymentAmount}`,
-      cancel_url: `http://localhost:5173?canceled=true`,
+      success_url: `${VITE_URL}/ideas/${ideaId}/contributions/${contribution.paymentAmount}`,
+      cancel_url: `${VITE_URL}?canceled=true`,
     
     }); 
 
