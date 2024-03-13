@@ -12,7 +12,7 @@ const chatController = require('../controllers/chat.controller');
 
 
 
-/// ruta para mostrar el total de contribuciones 
+/// contribuciones
 
 router.get('/ideas/total-contributions',authMiddleware.isAuthenticated, ideasController.getTotalContributions);
 

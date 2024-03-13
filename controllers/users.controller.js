@@ -25,7 +25,10 @@ module.exports.create = (req, res, next) => {
 
 const getUser = (id, req, res, next) => {
   const profilePromise = User.findById(id)
-    .populate('ideas bookmarks contributions');
+    // .populate('ideas bookmarks contributions')
+    .populate('ideas')
+    .populate('bookmarks')
+    .populate({ path: 'contributions', populate: 'idea' })
 
   Promise.all([profilePromise])
     .then(([user]) => {
@@ -70,5 +73,5 @@ module.exports.deleteAccount = (req, res, next) => {
 
 
 
-    
+
 };
